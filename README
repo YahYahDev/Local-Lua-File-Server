@@ -6,3 +6,9 @@ Local-Lua-File-Server:
 Dependencys:
 	1): lua-socket https://lunarmodules.github.io/luasocket/
 
+
+
+TODO:
+
+	1): Pack dependencys with git repo or in the "make script"
+
