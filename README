@@ -1,3 +1,8 @@
 Local-Lua-File-Server:
 
 	A work and progress file server writen in lua using lua-socket
+
+
+Dependencys:
+	1): lua-socket https://lunarmodules.github.io/luasocket/
+
