@@ -5,6 +5,10 @@ Local-Lua-File-Server:
 
 Dependencys:
 
+	Note: only works on systems that have the following commands "ls, mkdir, rmdir, rm -r"
+		  this is because of the file "src/Modules/Std/StdDir.lua" if you dont have the commands from above just remap to what you need them to be.
+
+
 	1): lua 5.1 or above
 
 	2): lua-socket https://lunarmodules.github.io/luasocket/
