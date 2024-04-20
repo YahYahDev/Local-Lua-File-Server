@@ -4,7 +4,10 @@ Local-Lua-File-Server:
 
 
 Dependencys:
-	1): lua-socket https://lunarmodules.github.io/luasocket/
+
+	1): lua 5.1 or above
+
+	2): lua-socket https://lunarmodules.github.io/luasocket/
 
 
 
