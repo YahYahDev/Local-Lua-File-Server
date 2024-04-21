@@ -1,33 +1,54 @@
 local socket = require("socket")
 
-local server = socket.bind("*a", 8888)
 
-while true do
+local dir = require("Modules.Std.StdDir")
 
-	local client = server:accept()
+local str = require("Modules.String.Str")
+local parse = require("Modules.String.Parse")
 
-	client:settimeout(10)
+local log = require("Modules.Std.Log")
+local cfg = require("Modules.Std.Cfg")
+--[[ TODO:
+	1): Needs to be able to receive and send files
 
-	local content, err = client:receive("*a")
+	2): Needs to be able to log all connections and actions
 
-	if content == nil then
+	3): Needs to be able to have a white list for allowed connections
 
-		print("ERROR: "..err)
-		return
-	else
-		-- print("DATA: "..content)
-		local file = io.open("received.png","wb")
+	4): Needs to be able to have a secure connection between the server and client
 
-		if content ~= nil then
+	5): Add plugin system to execute custom lua code for the server
+]]
 
-			file:write(content)
-		else
-			print("Content is Nil Unable to Write to File")
-		end
 
-		file:close()
-		return
-	end
+---@class Server
+---@type tablelib
+local server = {
 
-client:close()
-end
+--	Used to make a white list to only accept wanted connections
+---@type table
+	whitelist ={
+
+	},
+
+---@type table
+-- Used to store a hash map of functions to be used at run time
+	plugs = {
+
+	},
+
+
+	Init = function (self)
+
+		self.config = cfg:Load("./config.cfg")
+		print(self.config["test"])
+	end,
+
+---@param self Server
+	run = function (self)
+		self:Init()
+	end,
+
+}
+
+return server

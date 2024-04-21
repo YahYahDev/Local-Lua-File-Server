@@ -38,18 +38,35 @@ local stddir = {
 ---@return string
     LsDir = function (Directory)
         if Directory == nil then
-            local handle = io.popen("ls -a")
+            local handle = io.popen("ls -d */ .*/")
             local content = handle:read("a")
             handle:close()
             return content
         else
-            local handle = io.popen("ls -a " .. Directory)
+            local handle = io.popen("ls -d */ .*/" .. Directory)
             local content = handle:read("a")
             handle:close()
             return content
         end
-    end
-
+    end,
+--[[
+    Lists a Directory basicly "ls Args"
+]]
+---@param Args string
+---@return string
+    Ls = function (Args)
+        if Args ~= nil then
+            local handle = io.popen("ls "..Args)
+            local content = handle:read("a")
+            handle:close()
+            return content
+        else
+            local handle = io.popen("ls")
+            local content = handle:read("a")
+            handle:close()
+            return content
+        end
+    end,
 
 
 }
