@@ -18,9 +18,15 @@ Dependencys:
 
 
 Log:
-	Node: the log logs everything in a 'Log' file and doesnt not make any seperate files
+	Note: the log logs everything in a 'Log' file and doesnt not make any seperate files
 		  if your needs require multiple 'Log' files then the modules for it is in the following
 		  /src/Modules/Std/Log.lua
+
+
+Plugs:
+	Note: the plug system is a system to load lua functions at run time in the server
+		  every interaction a client can do is through a plug to add plugs make a .plug file
+		  in /src/Server/Plugs/whateveryouwant.plug
 
 
 Configuration:
@@ -48,3 +54,6 @@ Configuration:
 TODO:
 
 	1): Pack dependencys with git repo or in the "make script"
+
+	2): Make tutorial for making plugs
+
