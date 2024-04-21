@@ -23,7 +23,7 @@ parse = {
 ---@param source string
 ---@param from string
 ---@param to string
----@return string[]
+---@return table
     GetAllBlock = function (source, from, to)
         local blocks = {}
 
