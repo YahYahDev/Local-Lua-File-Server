@@ -53,5 +53,5 @@ TODO:
 
 	1): Pack dependencys with git repo or in the "make script"
 
-	2): Make tutorial for making plugs
+	2): Implement Server:HandleInput()
 
