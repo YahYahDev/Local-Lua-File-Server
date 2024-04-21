@@ -36,12 +36,42 @@ local server = {
 	plugs = {
 
 	},
+---@type number
+	port = 0,
 
+	directory = "",
 
 	Init = function (self)
-
+		-- Loads Config
 		self.config = cfg:Load("./config.cfg")
-		print(self.config["test"])
+
+		-- Loads whitelist from ./config.cfg
+		local whitelist = str.Replace(self.config["whitelist"], ",%s+", "\n")
+		whitelist = whitelist .. "\n"
+		for i = 1, #str.Match(whitelist, "\n") do
+			local credential =  parse.GetBlock(whitelist, "^", "\n")
+			self.whitelist[tostring(credential)] = true
+			whitelist = parse.GetBlock(whitelist, "\n", "$")
+		end
+
+		-- Loads port from ./config.cfg default is 8888
+		if self.config["port"] ~= nil then
+			self.port = self.config["port"]
+			log:Add("Loaded Port: "..self.config["port"])
+			else
+			log:Error("Failed to Load 'port' from 'config.cfg'")
+			return nil
+		end
+
+		-- Loads directory from ./config.cfg default is nil
+		if self.config["directory"] ~= "" then
+			self.directory = self.config["directory"]
+			log:Add("Loaded Directory: "..self.config["directory"])
+		else
+			log:Error("Failed to Load 'directory' from 'config.cfg'")
+			return nil
+		end
+
 	end,
 
 ---@param self Server
