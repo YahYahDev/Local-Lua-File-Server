@@ -2,10 +2,16 @@
 str = {
 
 
+---@param str string
+---@return number
     Len = function (str)
         return string.len(str)
     end,
 
+
+---@param str string
+---@param pattern string
+---@return table number
     Match = function (str, pattern)
         --return a list of all instances of a "pattern"
         local found = {}
@@ -21,7 +27,6 @@ str = {
             if first == nil or last == nil then
                 break
             end
-            print(loop .. first)
             found[loop] = {first = first, last = last}
 
             str = string.sub(str, last +1)
@@ -33,6 +38,9 @@ str = {
     end,
 
 
+---@param string string
+---@param pattern string
+---@return number
     Find = function (string, pattern)
         --return the location of the first instance of a "pattern" in "string"
         return string.find(string, pattern)
@@ -51,7 +59,11 @@ str = {
     Merge = function (stringA, stringB)
         return stringA .. stringB
     end,
-
+--returns a string that replaces all instances of "pattern" with "replacement"
+---@param string string
+---@param pattern string
+---@param replacement string
+---@return string
     Replace = function (string, pattern, replacement)
         return string.gsub(string, pattern, replacement)
     end,
@@ -61,7 +73,7 @@ str = {
         for i = 1, #Array do
             print(Array[i])
         end
-    end
+    end,
 }
 
 
