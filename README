@@ -6,7 +6,8 @@ Local-Lua-File-Server:
 Dependencys:
 
 	Note: only works on systems that have the following commands "ls, mkdir, rmdir, rm -r"
-		  this is because of the file "src/Modules/Std/StdDir.lua" if you dont have the commands from above just remap to what you need them to be.
+		  this is because of the file "src/Modules/Std/StdDir.lua" if you dont have the commands
+		  from above just remap to what you need them to be.
 
 
 	1): lua 5.1 or above
@@ -15,7 +16,29 @@ Dependencys:
 
 
 
+
+Configuration:
+
+	Note: the config format goes [key] = [value1, value2, ect]
+		  no multiline key value pairs and no commits for the time being,
+
+	Example:
+		```
+		[whitelist] = [localhost, FriendsIpAddress, FamiliysIpAddress]
+		[port] = [8888]
+		[directory] = [/home/user/FileServer/Directory/]
+
+		```
+
+	1): 'directory' should be the absolute path to a folder you want the server to have accesse to.
+
+	2): 'whitelist' should be a list of [to be implemented] id's to allow to accesse the server
+
+	3): 'port' should be the port you have open for connections
+
+
+
+
 TODO:
 
 	1): Pack dependencys with git repo or in the "make script"
-
