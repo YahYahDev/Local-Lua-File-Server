@@ -25,11 +25,7 @@ local stddir = {
 ]]
 ---@param DirName string
     RmDir = function (DirName)
-        if os.getenv("OS") == "Windows" then
-            os.execute("rmdir /s /q " .. DirName)
-        else
-            os.execute("r -r " .. DirName)
-        end
+        os.execute("r -r " .. DirName)
     end,
 --[[
 
