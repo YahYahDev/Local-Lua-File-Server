@@ -7,5 +7,4 @@ local parse = require("Modules.String.Parse")
 local Server = require("Server.server")
 local Client = require("Client.client")
 
-
-Server:Init()
+Server:run()
