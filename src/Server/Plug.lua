@@ -15,7 +15,7 @@ local plug = {
 ---@param PlugPath string
 ---@return nil Failed
 	Unpack = function (self, PlugPath)
-
+		-- Opens plugin file for parsing
 		local file = io.open(PlugPath,"r")
 		if file == nil then
 			log:Error("Failed to Load Plugin from: "..PlugPath)
@@ -24,16 +24,27 @@ local plug = {
 		end
 		local content = file:read("a")
 		file:close()
+
 		-- Parse all blocks of code in a plugin
 		local chunks = parse.GetAllBlock(content, "start:", "end:")
 
 		-- Sets func names to key in plug
 		log:Add("Loading Plugin: "..PlugPath)
 		for i = 1, #chunks do
-			local key = parse.GetBlock(chunks[1], "", "\n")
-			local func = parse.GetBlock(chunks[1], "\n", "\n$")
-			self[key] = load(func)
-			log:Add("   Loaded: "..key)
+			-- Parses for key/name for function
+			local key = parse.GetBlock(chunks[i], "", "\n")
+			-- Parses for code
+			local code = parse.GetBlock(chunks[i], "\n", "\n$")
+
+			local func, funcerr = load(code)
+			-- Error checks if function is able to be loaded
+			if func ~= nil then
+				log:Add("   Loaded: "..key)
+				self[key] = func
+			else
+				log:Error("   Failed to Load: '"..key.."' Error: "..funcerr)
+			end
+
 		end
 	end,
 ---@param self Plug
@@ -42,7 +53,7 @@ local plug = {
 		-- Get all plugin files and put them into a chunk array
 		local pluglist = dir.Ls(PlugDir)
 		if pluglist == nil then
-			log:Error("Failed to Load Plugins from: "..PlugDir)
+			log:Error("Failed to Load Plugins from: "..PlugDir.." Maby wrong directory?")
 		else
 			log:Add("Loading Plugins from: "..PlugDir)
 		end
