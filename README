@@ -5,10 +5,8 @@ Local-Lua-File-Server:
 
 Dependencys:
 
-	Note: only works on systems that have the following commands "ls, mkdir, rmdir, rm -r"
-		  this is because of the file "src/Modules/Std/StdDir.lua" if you dont have the commands
-		  from above just remap to what you need them to be.
-
+	Note: the default configuration does not support windows, please see Server/Plugs/Default.plug
+		  and Modules/Std/StdDir.lua if you want to change it to support being used on windows
 
 	1): lua 5.2+ and maby luajit with a little tweaking
 
