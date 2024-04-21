@@ -17,6 +17,12 @@ Dependencys:
 
 
 
+Log:
+	Node: the log logs everything in a 'Log' file and doesnt not make any seperate files
+		  if your needs require multiple 'Log' files then the modules for it is in the following
+		  /src/Modules/Std/Log.lua
+
+
 Configuration:
 
 	Note: the config format goes [key] = [value1, value2, ect]
