@@ -10,7 +10,7 @@ Dependencys:
 		  from above just remap to what you need them to be.
 
 
-	1): lua 5.1 or above
+	1): lua 5.2+ and maby luajit with a little tweaking
 
 	2): lua-socket https://lunarmodules.github.io/luasocket/
 
