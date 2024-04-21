@@ -1,11 +1,20 @@
 local socket = require("socket")
 
+-- Module for oop like tables
+local struct = require("Modules.Utils.Struct")
 
+-- Module for io like "ls, mkdir, rm, rm -r"
 local dir = require("Modules.Std.StdDir")
 
+-- Modules for string manipulation and parsing
 local str = require("Modules.String.Str")
 local parse = require("Modules.String.Parse")
 
+-- Module for loading Plugs
+---@class Plug
+local plug = require("Server.Plug")
+
+-- Modules for loging and config loading
 local log = require("Modules.Std.Log")
 local cfg = require("Modules.Std.Cfg")
 --[[ TODO:
@@ -21,6 +30,8 @@ local cfg = require("Modules.Std.Cfg")
 ]]
 
 
+plug.new = struct.new()
+
 ---@class Server
 ---@type tablelib
 local server = {
@@ -31,14 +42,14 @@ local server = {
 
 	},
 
----@type table
--- Used to store a hash map of functions to be used at run time
-	plugs = {
 
-	},
+-- Used to store a hash map of functions to be used at run time
+---@type Plug
+	plug = plug:new(),
+
 ---@type number
 	port = 0,
-
+---@type string
 	directory = "",
 
 	Init = function (self)
@@ -72,14 +83,44 @@ local server = {
 			return nil
 		end
 
+		-- Loads Plug
+
+		self.plug:Load(config["plugdir"])
+
+		return true
 	end,
 
 ---@param self Server
-	run = function (self)
+	Run = function (self)
+		::Reboot::
 		if self:Init() == nil then
+			log:Error("Failed to Init")
 			return nil
 		end
 
+		local Server = socket.bind("*", self.port)
+
+		while true do
+
+			local Client = Server:accept()
+			Client:settimeout(5)
+			local ip, port = client:getsockname()
+
+			if self.whitelist[ip] == true then
+				log:Add("Connection: ip: "..ip.." port: "..port.."  Autherized")
+				Client:send("Accepted: Autherized User")
+			else
+				log:Add("Connnection: ip: "..ip.." port: "..port.."  Rejected")
+				Client:send("Rejected: Not Autherized User")
+				Client:close()
+			end
+
+			-- Reboot server to refresh any config or plugins
+			if Client:receive() == "reboot" then
+				goto Reboot
+			end
+
+		end
 	end,
 
 }
