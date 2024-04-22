@@ -120,7 +120,7 @@ server = {
 
 
 		-- Reference for how to call plugin functions
-		print(self.plug["ls"]()())
+		-- print(self.plug["ls"]()())
 
 		-- Bind server socket
 		local Server = socket.bind("*", self.port)
