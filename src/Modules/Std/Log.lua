@@ -3,7 +3,7 @@ local log = {
 
 ---@param msg string
 	Add = function (self, msg)
-		local file = io.open("Log", "a+")
+		local file = io.open("Log.log", "a+")
 		if file == nil then
 			print("Failed to Log Message <<"..msg..">>")
 			return
@@ -13,7 +13,7 @@ local log = {
 	end,
 
 	Error = function (self, msg)
-		local file = io.open("Log", "a+")
+		local file = io.open("Log.log", "a+")
 		if file == nil then
 			print("Error: Failed to Log Message <<"..msg..">>")
 			return
