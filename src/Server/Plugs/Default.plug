@@ -1,0 +1,48 @@
+start:ls
+--[[
+	Plugins are made by initalizing a block then puting
+	"return function(arguments)
+		code logic
+	end"
+
+	if a plugin fails to load check the log and it should show syntax errors
+	and where the server when wrong loading it
+
+	remember that plugins only have accesse to global values when trying to accesse
+	values
+]]
+return function(Args)
+	if Args ~= nil then
+		local handle = io.popen("ls "..server.directory..Args)
+		local content = handle:read("a")
+		handle:close()
+		return content
+	else
+		local handle = io.popen("ls "..server.directory)
+		local content = handle:read("a")
+		handle:close()
+		return content
+	end
+end
+end:
+
+
+start:rmdir
+    return function (DirName)
+        os.execute("r -r "..server.directory..DirName)
+    end
+end:
+
+
+start:mkdir
+    return function (DirName)
+        os.execute("mkdir "..server.directory.. DirName)
+    end
+end:
+
+
+start:touch
+	return function (FileName)
+		os.execute("touch "..server.directory..FileName)
+	end
+end:
