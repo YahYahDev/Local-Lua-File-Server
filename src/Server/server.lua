@@ -33,8 +33,7 @@ local cfg = require("Modules.Std.Cfg")
 plug.new = struct.new()
 
 ---@class Server
----@type tablelib
-local server = {
+server = {
 
 --	Used to make a white list to only accept wanted connections
 ---@type table
@@ -49,8 +48,10 @@ local server = {
 
 ---@type number
 	port = 0,
+
 ---@type string
 	directory = "",
+
 
 	Init = function (self)
 		-- Loads Config
@@ -59,11 +60,13 @@ local server = {
 		-- Loads whitelist from ./config.cfg
 		local whitelist = str.Replace(config["whitelist"], ",%s+", "\n")
 		whitelist = whitelist .. "\n"
+
 		for i = 1, #str.Match(whitelist, "\n") do
 			local credential =  parse.GetBlock(whitelist, "^", "\n")
 			self.whitelist[tostring(credential)] = true
 			whitelist = parse.GetBlock(whitelist, "\n", "$")
 		end
+
 
 		-- Loads port from ./config.cfg default is 8888
 		if config["port"] ~= nil then
@@ -74,6 +77,7 @@ local server = {
 			return nil
 		end
 
+
 		-- Loads directory from ./config.cfg default is nil
 		if config["directory"] ~= "" then
 			self.directory = config["directory"]
@@ -83,6 +87,7 @@ local server = {
 			return nil
 		end
 
+
 		-- Loads Plug
 
 		self.plug:Load(config["plugdir"])
@@ -90,22 +95,45 @@ local server = {
 		return true
 	end,
 
+	HandleInput = function (self, input)
+		--[[ TODO:
+			1): Able to run plugin functions
+
+			2): Able to send/recieve files to/from client
+
+			3): Concurancy in the future?
+		]]
+
+		log:Add("Unimplemented 'HandleInput'")
+
+	end,
+
 ---@param self Server
 	Run = function (self)
 		::Reboot::
+
 		if self:Init() == nil then
 			log:Error("Failed to Init")
 			return nil
 		end
+		log:Add("Init Complete: ")
 
+
+		-- Reference for how to call plugin functions
+		print(self.plug["ls"]()())
+
+		-- Bind server socket
 		local Server = socket.bind("*", self.port)
 
+		-- Server event loop
 		while true do
 
+			-- Trys to accept connections
 			local Client = Server:accept()
 			Client:settimeout(5)
 			local ip, port = client:getsockname()
 
+			-- Checks to see if connection is on whitelist
 			if self.whitelist[ip] == true then
 				log:Add("Connection: ip: "..ip.." port: "..port.."  Autherized")
 				Client:send("Accepted: Autherized User")
@@ -115,10 +143,21 @@ local server = {
 				Client:close()
 			end
 
+			local msg = Client:receive("*a")
+
 			-- Reboot server to refresh any config or plugins
-			if Client:receive() == "reboot" then
+			if msg == "reboot" then
 				goto Reboot
 			end
+
+			if self:HandleInput(msg) == nil then
+				log:Error("Failed to Handle Input from ip: "..ip.." port:"..port.." Msg: "..msg.."'")
+				Client:send("Failed to Handle Input from ip: "..ip.." port:"..port.." Msg: "..msg.."'")
+				Client:close()
+			else
+				log:Add("Handled: '"..msg.."' from ip: "..ip.." port: "..port)
+			end
+
 
 		end
 	end,
