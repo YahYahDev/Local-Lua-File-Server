@@ -54,6 +54,7 @@ server = {
 
 
 	Init = function (self)
+		log:Add("Starting Server")
 		-- Loads Config
 		local config = cfg:Load("./config.cfg")
 
@@ -163,6 +164,7 @@ server = {
 
 
 		end
+		-- Close connection to client
 		Server:close()
 
 		log:Add("Server Turned Off")
