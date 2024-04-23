@@ -72,7 +72,7 @@ server = {
 		if config["port"] ~= nil then
 			self.port = config["port"]
 			log:Add("Loaded Port: " ..config["port"])
-			else
+		else
 			log:Error("Failed to Load 'port' from 'config.cfg'")
 			return nil
 		end
@@ -80,7 +80,7 @@ server = {
 
 		-- Loads directory from ./config.cfg default is nil
 		if config["directory"] ~= "" then
-			self.directory = config["directory"]
+			self.directory = config["directory"] .. "/Server/Directory"
 			log:Add("Loaded Directory: " ..config["directory"])
 		else
 			log:Error("Failed to Load 'directory' from 'config.cfg'")
@@ -124,13 +124,16 @@ server = {
 
 		-- Bind server socket
 		local Server = socket.bind("*", self.port)
-
+		Server:settimeout(5)
 		-- Server event loop
 		while true do
-
+			::RETRY::
 			-- Trys to accept connections
 			local Client = Server:accept()
-			Client:settimeout(5)
+			if Client == nil then
+				log:Error("No Connections Found Retrying")
+				goto RETRY
+			end
 			local ip, port = client:getsockname()
 
 			-- Checks to see if connection is on whitelist
@@ -160,6 +163,9 @@ server = {
 
 
 		end
+		Server:close()
+
+		log:Add("Server Turned Off")
 	end,
 
 }
