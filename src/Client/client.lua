@@ -18,6 +18,7 @@ client = {
 ---@param self Client
 ---@return nil
 	Init = function (self)
+		log:Add("Starting Client")
 		-- Loads config from ./config.cfg
 		local config = cfg:Load("./config.cfg")
 
@@ -55,14 +56,18 @@ client = {
 		if self:Init() == nil then
 			log:Error("Failed to run Client:Init() for Client:Run()")
 		end
-		-- Try to connect to server?
-		local Client = socket.connect(self.ip, self.port)
-		-- Set timeout for connections
-		Client:settimeout(5)
-
 
 		-- Event loop
 		while true do
+
+			-- Try to connect to server?
+			local Client = socket.connect(self.ip, self.port)
+
+			-- Set timeout for connections
+			Client:settimeout(5)
+
+			Client:send("Hello from client!")
+
 
 		end
 	end
