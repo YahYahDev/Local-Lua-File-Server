@@ -55,13 +55,14 @@ client = {
 	Run = function (self)
 		if self:Init() == nil then
 			log:Error("Failed to run Client:Init() for Client:Run()")
+			return nil
 		end
-
+		local Master = socket.tcp()
 		-- Event loop
 		while true do
 
 			-- Try to connect to server?
-			local Client = socket.connect(self.ip, self.port)
+			local Client = Master.connect(self.ip, self.port)
 
 			-- Set timeout for connections
 			Client:settimeout(5)
@@ -70,6 +71,8 @@ client = {
 
 
 		end
+
+		Master:close()
 	end
 }
 
