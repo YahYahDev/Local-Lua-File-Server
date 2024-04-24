@@ -55,3 +55,5 @@ TODO:
 
 	2): Implement Server:HandleInput()
 
+	3): Make duplicate loging errors/messages stack insted of having a new line for every error/message
+
