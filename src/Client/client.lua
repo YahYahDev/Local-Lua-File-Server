@@ -48,7 +48,7 @@ client = {
 			return nil
 		end
 
-
+		return true
 	end,
 
 ---@param self Client
@@ -57,6 +57,7 @@ client = {
 			log:Error("Failed to run Client:Init() for Client:Run()")
 			return nil
 		end
+
 		local Master = socket.tcp()
 		-- Event loop
 		while true do
