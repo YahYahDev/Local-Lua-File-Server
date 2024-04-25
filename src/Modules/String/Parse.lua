@@ -48,7 +48,20 @@ parse = {
         end
 
         return blocks
-    end
+    end,
+
+    GetLines = function (content)
+        local Chunk = content
+        local Lines = parse.GetAllBlock(Chunk, "^", "\n")
+
+        for i = 1, #Lines do
+            local line = parse.GetBlock(Chunk, "^", "\n")
+            Chunk = parse.GetBlock(Chunk, "\n", "$")
+            Lines[i] = line
+        end
+
+        return Lines
+    end,
 
 }
 

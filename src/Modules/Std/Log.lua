@@ -1,3 +1,5 @@
+local parse = require("Modules.String.Parse")
+
 ---@class log
 local log = {
 
@@ -5,10 +7,20 @@ local log = {
 	Add = function (self, msg)
 		local file = io.open("Log.log", "a+")
 		if file == nil then
-			print("Failed to Log Message <<"..msg..">>")
+			print("Log: Failed to Log Message <<"..msg..">>")
 			return
 		end
-		file:write("[Log]:     " .. msg .. "\n")
+
+		local lines = parse.GetLines(file:read("a"))
+
+		if lines[#lines] ~= "[Log]:     " .. msg and lines[#lines] ~= "[Log]:     " .. msg .. "..." then
+			file:write("[Log]:     " .. msg .. "\n")
+		elseif lines[#lines] == "[Log]:     " .. msg .. "..." then
+			-- Do nothing so you dont make duplicate loging
+		else
+			file:write("[Log]:     " .. msg.. "...\n")
+		end
+
 		file:close()
 	end,
 
@@ -18,7 +30,16 @@ local log = {
 			print("Error: Failed to Log Message <<"..msg..">>")
 			return
 		end
-		file:write("[Error]:   " .. msg.. "\n")
+
+		local lines = parse.GetLines(file:read("a"))
+
+		if lines[#lines] ~= "[Error]:   " .. msg and lines[#lines] ~= "[Error]:   " .. msg .. "..." then
+			file:write("[Error]:   " .. msg .. "\n")
+		elseif lines[#lines] == "[Error]:   " .. msg .. "..." then
+			-- Do nothing so you dont make duplicate loging
+		else
+			file:write("[Error]:   " .. msg.. "...\n")
+		end
 		file:close()
 	end,
 
