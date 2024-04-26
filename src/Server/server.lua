@@ -106,7 +106,7 @@ server = {
 		]]
 
 		log:Add("Unimplemented 'HandleInput'")
-
+		return nil
 	end,
 
 ---@param self Server
@@ -124,18 +124,22 @@ server = {
 		-- print(self.plug["ls"]()())
 
 		-- Bind server socket
-		local Server = socket.bind("*", self.port)
+		local Server, err = socket.bind("*", self.port)
+		if Server == nil then
+			log:Error("Error socket.bind(\"*\") Failed Message: "..err)
+			goto Reboot
+		end
 		Server:settimeout(5)
 		-- Server event loop
 		while true do
 			::RETRY::
 			-- Trys to accept connections
-			local Client = Server:accept()
+			local Client, err = Server:accept()
 			if Client == nil then
-				log:Error("No Connections Found Retrying")
+				log:Error(err)
 				goto RETRY
 			end
-			local ip, port = client:getsockname()
+			local ip, port = Client:getsockname()
 
 			-- Checks to see if connection is on whitelist
 			if self.whitelist[ip] == true then
@@ -148,9 +152,10 @@ server = {
 			end
 
 			local msg = Client:receive("*a")
-
+			print(msg)
 			-- Reboot server to refresh any config or plugins
 			if msg == "reboot" then
+				log:Add("Rebooting")
 				goto Reboot
 			end
 
