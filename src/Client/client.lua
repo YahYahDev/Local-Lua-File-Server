@@ -58,22 +58,31 @@ client = {
 			return nil
 		end
 
-		local Master = socket.tcp()
+		local Client = socket.tcp()
+
+		-- Set timeout for connections
+		Client:settimeout(5)
+
 		-- Event loop
 		while true do
-
+			::RETRY::
 			-- Try to connect to server?
-			local Client = Master.connect(self.ip, self.port)
+			local err, errmsg = Client:connect(self.ip, self.port)
+			if err == nil then
+				log:Error("Error: "..errmsg)
+				goto RETRY
+			end
 
-			-- Set timeout for connections
-			Client:settimeout(5)
+			local msg = io.read()
 
-			Client:send("Hello from client!")
+			Client:send(msg)
 
 
+			Client:close()
 		end
 
-		Master:close()
+		Client:close()
+
 	end
 }
 
