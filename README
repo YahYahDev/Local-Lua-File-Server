@@ -16,15 +16,29 @@ Dependencys:
 
 
 Log:
+
 	Note: the log logs everything in a 'Log' file and doesnt not make any seperate files
 		  if your needs require multiple 'Log' files then the modules for it is in the following
 		  /src/Modules/Std/Log.lua
 
+	Doc:
+
+		'log:Add(msg)' put a string you want to log in msg and it will log in Log.log
+
+		'log:Error(msg)' put a string you want to log in msg and it will log in Log.log
+
+		'duplicate logs' all duplicate logs are expressed as a ... at the end of the message
+
+
+
 
 Plugs:
+
 	Note: the plug system is a system to load lua functions at run time in the server
 		  every interaction a client can do is through a plug to add plugs make a .plug file
 		  in /src/Server/Plugs/whateveryouwant.plug
+
+	Doc: please reference Default.plug for how to make a plugin
 
 
 Configuration:
@@ -37,16 +51,22 @@ Configuration:
 		[whitelist] = [localhost, FriendsIpAddress, FamiliysIpAddress]
 		[port] = [8888]
 		[directory] = [/home/user/FileServer/Directory/]
+		[ip] = [localhost]
+		[plugdir] = [Server/Plugs]
 
 		```
 
-	1): 'directory' should be the absolute path to a folder you want the server to have accesse to.
+	1): 'directory' should be the absolute path to the root folder of the github repo
 
-	2): 'whitelist' should be a list of [to be implemented] id's to allow to accesse the server
+	2): 'whitelist' should be a list of [ips, you, want] to allow to accesse the server
 
 	3): 'port' should be the port you have open for connections
 
+	4): 'ip' should be the ip you want to connect to as a client
 
+	5); 'plugdir' should be the path to plugins for the server.
+			should not need  to change from default
+			as long as the project structure is default
 
 
 TODO:
@@ -54,6 +74,4 @@ TODO:
 	1): Pack dependencys with git repo or in the "make script"
 
 	2): Implement Server:HandleInput()
-
-	3): Make duplicate loging errors/messages stack insted of having a new line for every error/message
 
