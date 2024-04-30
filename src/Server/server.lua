@@ -7,7 +7,6 @@ local struct = require("Modules.Utils.Struct")
 local dir = require("Modules.Std.StdDir")
 
 -- Modules for string manipulation and parsing
-local str = require("Modules.String.Str")
 local parse = require("Modules.String.Parse")
 
 -- Module for loading Plugs
@@ -17,20 +16,17 @@ local plug = require("Server.Plug")
 -- Modules for loging and config loading
 local log = require("Modules.Std.Log")
 local cfg = require("Modules.Std.Cfg")
---[[ TODO:
-	1): Needs to be able to receive and send files
-
-	2): Needs to be able to log all connections and actions
-
-	3): Needs to be able to have a white list for allowed connections
-
-	4): Needs to be able to have a secure connection between the server and client
-
-	5): Add plugin system to execute custom lua code for the server
-]]
 
 
 plug.new = struct.new()
+
+
+
+
+
+
+
+
 
 ---@class Server
 server = {
@@ -53,7 +49,7 @@ server = {
 	directory = "",
 
 
-	Init = function (self)
+Init = function (self)
 		log:Add("Starting Server")
 		-- Loads Config
 		local config = cfg:Load("./config.cfg")
@@ -96,17 +92,32 @@ server = {
 		return true
 	end,
 
-	HandleInput = function (self, input)
-		--[[ TODO:
-			1): Able to run plugin functions
 
-			2): Able to send/recieve files to/from client
+---@param self Server
+---@param client table
+---@return boolean
+	VerifyClient = function (self, client)
+		-- If client is on the whitelist will return true
+		local ip, port = client:getsockname()
 
-			3): Concurancy in the future?
-		]]
+		if self.whitelist[ip] == true then
+			-- Accepts authorized client connection
+			log:Add("Connection: ip: "..ip.." port: "..port.."  Autherized")
+			return true
+		else
+			-- Cleans up unauthorized client from connecting
+			log:Add("Connnection: ip: "..ip.." port: "..port.."  Rejected")
+			client:close()
+			return false
+		end
 
-		log:Add("Unimplemented 'HandleInput'")
-		return nil
+	end,
+
+
+	HandleClient = function (self, client)
+
+
+
 	end,
 
 ---@param self Server
@@ -125,11 +136,18 @@ server = {
 
 		-- Bind server socket
 		local Server, err = socket.bind("*", self.port)
+
+		-- Checks for error from accepting incoming connection
 		if Server == nil then
-			log:Error("Error socket.bind(\"*\") Failed Message: "..err)
+			log:Error("Error socket.bind(\"*\") Failed: "..err)
 			goto Reboot
 		end
-		Server:settimeout(5)
+
+		-- Set timeout for clients to connect
+		Server:settimeout(10)
+
+
+
 		-- Server event loop
 		while true do
 			::RETRY::
@@ -139,40 +157,18 @@ server = {
 				log:Error(err)
 				goto RETRY
 			end
-			local ip, port = Client:getsockname()
 
-			-- Checks to see if connection is on whitelist
-			if self.whitelist[ip] == true then
-				log:Add("Connection: ip: "..ip.." port: "..port.."  Autherized")
-				Client:send("Accepted: Autherized User")
-			else
-				log:Add("Connnection: ip: "..ip.." port: "..port.."  Rejected")
-				Client:send("Rejected: Not Autherized User")
-				Client:close()
+			-- Checks to see if the client is on the whitelist
+			if self:VerifyClient(Client) == true then
+				-- Handles client
+				self:HandleClient(Client)
+
 			end
 
-			local msg = Client:receive("*a")
-			print(msg)
-			-- Reboot server to refresh any config or plugins
-			if msg == "reboot" then
-				log:Add("Rebooting")
-				goto Reboot
-			end
-
-			if self:HandleInput(msg) == nil then
-				log:Error("Failed to Handle Input from ip: "..ip.." port:"..port.." Msg: "..msg.."'")
-				Client:send("Failed to Handle Input from ip: "..ip.." port:"..port.." Msg: "..msg.."'")
-				Client:close()
-			else
-				log:Add("Handled: '"..msg.."' from ip: "..ip.." port: "..port)
-			end
-
-
+			Client:close()
 		end
 		-- Close connection to client
 		Server:close()
-
-		log:Add("Server Turned Off")
 	end,
 
 }

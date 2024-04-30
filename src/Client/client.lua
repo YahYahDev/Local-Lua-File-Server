@@ -1,11 +1,13 @@
 local socket = require("socket")
 
-local str = require("Modules.String.Str")
 local parse = require("Modules.String.Parse")
 
 local cfg = require("Modules.Std.Cfg")
 
 local log = require("Modules.Std.Log")
+
+
+
 ---@class Client
 client = {
 
@@ -51,6 +53,11 @@ client = {
 		return true
 	end,
 
+	HandleConnection = function (self, client)
+
+
+	end,
+
 ---@param self Client
 	Run = function (self)
 		if self:Init() == nil then
@@ -61,28 +68,27 @@ client = {
 		local Client = socket.tcp()
 
 		-- Set timeout for connections
-		Client:settimeout(5)
+		Client:settimeout(10)
 
 		-- Event loop
 		while true do
 			::RETRY::
 			-- Try to connect to server?
 			local err, errmsg = Client:connect(self.ip, self.port)
+
+			-- If failed to connect retry
 			if err == nil then
 				log:Error("Error: "..errmsg)
 				goto RETRY
 			end
 
-			local msg = io.read()
+			-- Handle connection
+			self:HandleConnection(Client)
 
-			Client:send(msg)
-
-
-			Client:close()
 		end
 
-		Client:close()
-
+			-- Close socket
+			Client:close()
 	end
 }
 
