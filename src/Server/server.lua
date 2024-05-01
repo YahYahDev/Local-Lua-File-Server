@@ -116,8 +116,31 @@ Init = function (self)
 
 	HandleClient = function (self, client)
 
+		local msg, err = client:receive("*l")
+		local ip, port = client:getsockname()
+		-- Failed to receive message from client clost connection
+		if msg == nil then
+			log:Error(err)
+			client:close()
+			return
+		end
+		-- Get base command
+		local command = parse.GetBlock(msg, "^", " ")
 
+		-- Handle command
+		if self.plug[command] ~= nil then
+			-- Execute command if it exists
+			-- and return it to client
+			log:Add("Executing Command \""..command.."\" for ip: ".. ip .. "port: "..port)
+			client:send(self.plug[command]()())
 
+		else
+			-- Handle invalid command
+			client:send("Invalid Command\n")
+		end
+
+		client:close()
+		return
 	end,
 
 ---@param self Server
@@ -165,7 +188,6 @@ Init = function (self)
 
 			end
 
-			Client:close()
 		end
 		-- Close connection to client
 		Server:close()

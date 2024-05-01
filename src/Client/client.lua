@@ -55,6 +55,40 @@ client = {
 
 	HandleConnection = function (self, client)
 
+		-- Set Lable
+		::RETRY::
+
+		-- Get user input
+		io.write(" >> ")
+		local command = io.read()
+
+		-- Attempt to send command
+		client:send(command.. " \n")
+
+		-- Attempt to receive callback from server
+		local msg, err = client:receive("*a")
+
+		if msg == nil then
+			log:Error(err)
+			if err == "closed" then
+				return
+			end
+			goto RETRY
+		end
+
+		-- Handle invalid command inputs
+		if msg == "Invalid Command" then
+			-- Log invalid command then retry
+			log:Error("Invalid Command: \""..command.."\"")
+			print("Invalid Command Please Try Again!")
+			goto RETRY
+		else
+			-- Handle output from server
+			print(msg)
+
+		end
+
+		client:close()
 
 	end,
 
