@@ -74,7 +74,7 @@ client = {
 		if str.Copy(command, str.Len(command), str.Len(command)) ~= " " then
 			client:send(command.. "  \n")
 		else
-			client:send(command.. " \n")
+			client:send(command.. "\n")
 		end
 
 		-- Attempt to receive callback from server

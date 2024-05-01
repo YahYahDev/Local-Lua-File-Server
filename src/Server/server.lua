@@ -102,7 +102,7 @@ Init = function (self)
 
 		if self.whitelist[ip] == true then
 			-- Accepts authorized client connection
-			log:Add("Connection: ip: "..ip.." port: "..port.."  Autherized")
+			log:Add("Connection: ip: "..ip.." port: "..port.."  Authorized")
 			return true
 		else
 			-- Cleans up unauthorized client from connecting
@@ -132,6 +132,7 @@ Init = function (self)
 			-- Parse command arguments if there are any
 			local args = parse.GetBlock(msg, " ", "$")
 			args = parse.GetAllBlock(args, "^", " ")
+			str.PrintArray(args)
 			-- Handle command and log it
 			log:Add("Executing Command \""..command.."\" for ip: ".. ip .. " port: "..port)
 			local result = self.plug[command]()(args)
