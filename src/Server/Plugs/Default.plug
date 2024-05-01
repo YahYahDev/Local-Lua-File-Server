@@ -11,9 +11,9 @@ start:ls
 	remember that plugins only have accesse to global values when trying to accesse
 	values
 ]]
-return function(Args)
-	if Args ~= nil then
-		local handle = io.popen("ls "..server.directory..Args)
+return function(args)
+	if args ~= nil then
+		local handle = io.popen("ls "..server.directory..args[1])
 		local content = handle:read("a")
 		handle:close()
 		return content
@@ -28,21 +28,21 @@ end:
 
 
 start:rmdir
-    return function (DirName)
-        os.execute("r -r "..server.directory..DirName)
+    return function (args)
+        os.execute("rm -r "..server.directory..tostring(args[1]))
     end
 end:
 
 
 start:mkdir
-    return function (DirName)
-        os.execute("mkdir "..server.directory.. DirName)
+    return function (args)
+        os.execute("mkdir "..server.directory.. args[1])
     end
 end:
 
 
 start:touch
-	return function (FileName)
-		os.execute("touch "..server.directory..FileName)
+	return function (args)
+		os.execute("touch "..server.directory..args[1])
 	end
 end:
