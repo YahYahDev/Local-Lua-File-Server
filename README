@@ -1,6 +1,7 @@
 Local-Lua-File-Server:
 
-	A work and progress file server writen in lua using lua-socket
+	a barely functional server that is written using luasocket,
+	able to support plugins and whitelists.
 
 
 Dependencys:
@@ -63,7 +64,7 @@ Configuration:
 
 	4): 'ip' should be the ip you want to connect to as a client
 
-	5); 'plugdir' should be the path to plugins for the server.
+	5): 'plugdir' should be the path to plugins for the server.
 			should not need  to change from default
 			as long as the project structure is default
 
@@ -72,5 +73,6 @@ TODO:
 
 	1): Pack dependencys with git repo or in the "make script"
 
-	2): Implement Server:HandleInput()
+	2): Implement a file transfer command/plugin for transfering files
 
+	3): Implement concurancy
