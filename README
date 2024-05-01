@@ -17,9 +17,8 @@ Dependencys:
 
 Log:
 
-	Note: the log logs everything in a 'Log' file and doesnt not make any seperate files
-		  if your needs require multiple 'Log' files then the modules for it is in the following
-		  /src/Modules/Std/Log.lua
+	Note: there are two seperate log files one for the "server" and one for the "client"
+		  the paths to said log files are in "server.lua" and "client.lua" in their init functions
 
 	Doc:
 
