@@ -2,10 +2,11 @@ local parse = require("Modules.String.Parse")
 
 ---@class log
 local log = {
-
+	-- used for setting custom path to a log
+	path = "",
 ---@param msg string
 	Add = function (self, msg)
-		local file = io.open("Log.log", "a+")
+		local file = io.open(self.path .. "Log.log", "a+")
 		if file == nil then
 			print("Log: Failed to Log Message <<"..msg..">>")
 			return

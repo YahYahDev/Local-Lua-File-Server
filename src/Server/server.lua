@@ -50,6 +50,7 @@ server = {
 
 
 Init = function (self)
+		log.path = "Server/"
 		log:Add("Starting Server")
 		-- Loads Config
 		local config = cfg:Load("./config.cfg")

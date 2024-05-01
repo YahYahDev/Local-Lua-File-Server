@@ -20,6 +20,7 @@ client = {
 ---@param self Client
 ---@return nil
 	Init = function (self)
+		log.path = "Client/"
 		log:Add("Starting Client")
 		-- Loads config from ./config.cfg
 		local config = cfg:Load("./config.cfg")
