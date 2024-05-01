@@ -65,7 +65,8 @@ client = {
 
 		-- Exit program if you say to
 		if command == "exit" then
-			return false
+			log:Add("Stoping Client")
+			return "exit"
 		end
 
 		-- Attempt to send command
@@ -82,7 +83,8 @@ client = {
 		if msg == nil then
 			log:Error(err)
 			if err == "closed" then
-				return
+				log:Error("Server Closed Connection")
+				return "closed"
 			end
 			goto RETRY
 		end
@@ -128,8 +130,10 @@ client = {
 			end
 
 			-- Handle connection
-			if self:HandleConnection(Client) == false then
+			if self:HandleConnection(Client) == "exit" then
 				break
+			elseif self:HandleConnection(Client) == "closed" then
+				goto RETRY
 			end
 
 		end
