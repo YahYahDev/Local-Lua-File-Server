@@ -65,7 +65,6 @@ Init = function (self)
 			whitelist = parse.GetBlock(whitelist, "\n", "$")
 		end
 
-
 		-- Loads port from ./config.cfg default is 8888
 		if config["port"] ~= nil then
 			self.port = config["port"]
@@ -132,7 +131,7 @@ Init = function (self)
 		if self.plug[command] ~= nil then
 			-- Execute command if it exists
 			-- and return it to client
-			log:Add("Executing Command \""..command.."\" for ip: ".. ip .. "port: "..port)
+			log:Add("Executing Command \""..command.."\" for ip: ".. ip .. " port: "..port)
 			client:send(self.plug[command]()())
 
 		else
