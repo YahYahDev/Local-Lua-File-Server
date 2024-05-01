@@ -26,7 +26,7 @@ local log = {
 	end,
 
 	Error = function (self, msg)
-		local file = io.open("Log.log", "a+")
+		local file = io.open(self.path .. "Log.log", "a+")
 		if file == nil then
 			print("Error: Failed to Log Message <<"..msg..">>")
 			return
