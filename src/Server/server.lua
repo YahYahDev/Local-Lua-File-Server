@@ -77,7 +77,7 @@ Init = function (self)
 
 		-- Loads directory from ./config.cfg default is nil
 		if config["directory"] ~= "" then
-			self.directory = config["directory"] .. "/Server/Directory"
+			self.directory = config["directory"] .. "/Server/Directory/"
 			log:Add("Loaded Directory: " ..config["directory"])
 		else
 			log:Error("Failed to Load 'directory' from 'config.cfg'")
@@ -129,10 +129,19 @@ Init = function (self)
 
 		-- Handle command
 		if self.plug[command] ~= nil then
-			-- Execute command if it exists
-			-- and return it to client
+			-- Parse command arguments if there are any
+			local args = parse.GetBlock(msg, " ", "$")
+			args = parse.GetAllBlock(args, "^", " ")
+			-- Handle command and log it
 			log:Add("Executing Command \""..command.."\" for ip: ".. ip .. " port: "..port)
-			client:send(self.plug[command]()())
+			local result = self.plug[command]()(args)
+			if "string" == type(result) then
+				client:send(result)
+			else
+				client:send("No Return Value Found In Function")
+			end
+				-- this is alot of curly braces!   ^ ^ ^
+
 
 		else
 			-- Handle invalid command

@@ -63,8 +63,18 @@ client = {
 		io.write(" >> ")
 		local command = io.read()
 
+		-- Exit program if you say to
+		if command == "exit" then
+			return false
+		end
+
 		-- Attempt to send command
-		client:send(command.. " \n")
+		-- Verify command to be able to be proccessed by server
+		if str.Copy(command, str.Len(command), str.Len(command)) ~= " " then
+			client:send(command.. "  \n")
+		else
+			client:send(command.. " \n")
+		end
 
 		-- Attempt to receive callback from server
 		local msg, err = client:receive("*a")
@@ -118,7 +128,9 @@ client = {
 			end
 
 			-- Handle connection
-			self:HandleConnection(Client)
+			if self:HandleConnection(Client) == false then
+				break
+			end
 
 		end
 
