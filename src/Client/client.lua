@@ -81,12 +81,15 @@ client = {
 		local msg, err = client:receive("*a")
 
 		if msg == nil then
-			log:Error(err)
+			-- Handle errors
 			if err == "closed" then
 				log:Error("Server Closed Connection")
-				return "closed"
+				client:close()
+				return
+			else
+				log:Error(msg)
+				return
 			end
-			goto RETRY
 		end
 
 		-- Handle invalid command inputs
@@ -132,8 +135,6 @@ client = {
 			-- Handle connection
 			if self:HandleConnection(Client) == "exit" then
 				break
-			elseif self:HandleConnection(Client) == "closed" then
-				goto RETRY
 			end
 
 		end

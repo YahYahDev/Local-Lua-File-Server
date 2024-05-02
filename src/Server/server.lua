@@ -118,7 +118,7 @@ Init = function (self)
 
 		local msg, err = client:receive("*l")
 		local ip, port = client:getsockname()
-		-- Failed to receive message from client clost connection
+		-- Failed to receive message from client close connection
 		if msg == nil then
 			log:Error(err)
 			client:close()
@@ -132,7 +132,7 @@ Init = function (self)
 			-- Parse command arguments if there are any
 			local args = parse.GetBlock(msg, " ", "$")
 			args = parse.GetAllBlock(args, "^", " ")
-			str.PrintArray(args)
+
 			-- Handle command and log it
 			log:Add("Executing Command \""..command.."\" for ip: ".. ip .. " port: "..port)
 			local result = self.plug[command]()(args)
@@ -141,7 +141,6 @@ Init = function (self)
 			else
 				client:send("No Return Value Found In Function")
 			end
-				-- this is alot of curly braces!   ^ ^ ^
 
 
 		else
