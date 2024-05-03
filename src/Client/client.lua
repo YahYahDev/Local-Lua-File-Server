@@ -81,6 +81,7 @@ client = {
 		local msg, err = client:receive("*a")
 
 		if msg == nil then
+
 			-- Handle errors
 			if err == "closed" then
 				log:Error("Server Closed Connection")
@@ -94,11 +95,13 @@ client = {
 
 		-- Handle invalid command inputs
 		if msg == "Invalid Command" then
+
 			-- Log invalid command then retry
 			log:Error("Invalid Command: \""..command.."\"")
 			print("Invalid Command Please Try Again!")
 			goto RETRY
 		else
+
 			-- Handle output from server
 			print(msg)
 
@@ -123,6 +126,7 @@ client = {
 		-- Event loop
 		while true do
 			::RETRY::
+
 			-- Try to connect to server?
 			local err, errmsg = Client:connect(self.ip, self.port)
 
