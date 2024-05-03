@@ -29,20 +29,30 @@ end:
 
 start:rmdir
     return function (args)
-        os.execute("rm -r "..server.directory..tostring(args[1]))
+		local handle = io.popen("rm -r "..server.directory..tostring(args[1]))
+		local content = handle:read("a")
+		handle:close()
+		return content
     end
 end:
 
 
 start:mkdir
     return function (args)
-        os.execute("mkdir "..server.directory.. args[1])
+		local handle = io.popen("mkdir "..server.directory.. args[1])
+		local content = handle:read("a")
+		handle:close()
+		return content
+
     end
 end:
 
 
 start:touch
 	return function (args)
-		os.execute("touch "..server.directory..args[1])
+		local handle = io.popen("touch "..server.directory..args[1])
+		local content = handle:read("a")
+		handle:close()
+		return content
 	end
 end:
