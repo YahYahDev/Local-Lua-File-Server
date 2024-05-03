@@ -21,13 +21,6 @@ local cfg = require("Modules.Std.Cfg")
 plug.new = struct.new()
 
 
-
-
-
-
-
-
-
 ---@class Server
 server = {
 
@@ -50,8 +43,11 @@ server = {
 
 
 Init = function (self)
+
+		-- Starts the log
 		log.path = "Server/"
 		log:Add("Starting Server")
+
 		-- Loads Config
 		local config = cfg:Load("./config.cfg")
 
@@ -74,7 +70,6 @@ Init = function (self)
 			return nil
 		end
 
-
 		-- Loads directory from ./config.cfg default is nil
 		if config["directory"] ~= "" then
 			self.directory = config["directory"] .. "/Server/Directory/"
@@ -86,7 +81,6 @@ Init = function (self)
 
 
 		-- Loads Plug
-
 		self.plug:Load(config["plugdir"])
 
 		return true
@@ -97,14 +91,17 @@ Init = function (self)
 ---@param client table
 ---@return boolean
 	VerifyClient = function (self, client)
+
 		-- If client is on the whitelist will return true
 		local ip, port = client:getsockname()
 
 		if self.whitelist[ip] == true then
+
 			-- Accepts authorized client connection
 			log:Add("Connection: ip: "..ip.." port: "..port.."  Authorized")
 			return true
 		else
+
 			-- Cleans up unauthorized client from connecting
 			log:Add("Connnection: ip: "..ip.." port: "..port.."  Rejected")
 			client:close()
@@ -114,21 +111,26 @@ Init = function (self)
 	end,
 
 
+
+
 	HandleClient = function (self, client)
 
 		local msg, err = client:receive("*l")
 		local ip, port = client:getsockname()
+
 		-- Failed to receive message from client close connection
 		if msg == nil then
 			log:Error(err)
 			client:close()
 			return
 		end
+
 		-- Get base command
 		local command = parse.GetBlock(msg, "^", " ")
 
 		-- Handle command
 		if self.plug[command] ~= nil then
+
 			-- Parse command arguments if there are any
 			local args = parse.GetBlock(msg, " ", "$")
 			args = parse.GetAllBlock(args, "^", " ")
@@ -156,15 +158,12 @@ Init = function (self)
 	Run = function (self)
 		::Reboot::
 
+		-- Init server settings
 		if self:Init() == nil then
 			log:Error("Failed to Init")
 			return nil
 		end
 		log:Add("Init Complete: ")
-
-
-		-- Reference for how to call plugin functions
-		-- print(self.plug["ls"]()())
 
 		-- Bind server socket
 		local Server, err = socket.bind("*", self.port)
@@ -183,6 +182,7 @@ Init = function (self)
 		-- Server event loop
 		while true do
 			::RETRY::
+
 			-- Trys to accept connections
 			local Client, err = Server:accept()
 			if Client == nil then
@@ -198,6 +198,7 @@ Init = function (self)
 			end
 
 		end
+
 		-- Close connection to client
 		Server:close()
 	end,
