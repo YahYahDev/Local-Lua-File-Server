@@ -15,6 +15,33 @@ Dependencys:
 
 
 
+Quick Start:
+
+		[Client]:
+
+			1): goto main.lua and insert Client:Run()
+
+			2): configure config.cfg
+
+				1): Set servers ip
+
+				2): Set port
+
+				3): Set source directory to the repo
+
+
+		[Server]:
+
+			1): goto main.lua and insert Server:Run()
+
+			2): configure config.cfg
+
+				1): Set whitelist for allowed connections
+
+				2): Set port
+
+				3): Set source directory to the repo
+
 
 Log:
 
